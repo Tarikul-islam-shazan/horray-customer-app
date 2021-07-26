@@ -27,6 +27,10 @@ class BrandDetailScreen extends StatelessWidget {
         brandItem[0].imgUrl,
         brandItem[0].name,
         brandItem[0].percentage,
+        brandItem[0].establishedDate,
+        brandItem[0].rating,
+        brandItem[0].openingTime,
+        brandItem[0].closingTime,
       ),
     );
   }

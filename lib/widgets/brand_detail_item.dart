@@ -4,12 +4,13 @@ class BrandDetailItem extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String percentage;
+  final String establishedDate;
+  final String rating;
+  final String opening;
+  final String closing;
 
-  BrandDetailItem(
-    this.imageUrl,
-    this.name,
-    this.percentage,
-  );
+  BrandDetailItem(this.imageUrl, this.name, this.percentage,
+      this.establishedDate, this.rating, this.opening, this.closing);
 
   @override
   Widget build(BuildContext context) {
@@ -70,20 +71,29 @@ class BrandDetailItem extends StatelessWidget {
                 children: <Widget>[
                   Row(
                     children: [
-                      Icon(Icons.work),
+                      Icon(Icons.watch),
                       SizedBox(
                         width: 6,
                       ),
-                      Text('BRAND NAME'),
+                      Text('Opening: ' + opening),
                     ],
                   ),
                   Row(
                     children: [
-                      Icon(Icons.rate_review),
+                      Icon(Icons.watch_later),
                       SizedBox(
                         width: 6,
                       ),
-                      Text('3'),
+                      Text('Closing: ' + closing),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.reviews),
+                      SizedBox(
+                        width: 6,
+                      ),
+                      Text('Rate: ' + rating),
                     ],
                   ),
                 ],
