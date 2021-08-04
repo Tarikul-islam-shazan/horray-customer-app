@@ -22,6 +22,7 @@ class BrandDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(brandItem[0].name),
+        elevation: 0,
       ),
       body: BrandDetailItem(
         brandItem[0].imgUrl,

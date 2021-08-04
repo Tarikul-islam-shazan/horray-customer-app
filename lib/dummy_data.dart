@@ -41,8 +41,6 @@ const DUMMY_BRANDS = const [
     openingTime: '10;00 am',
     closingTime: '8:00 pm',
   ),
-];
-const DUMMY_FAVOURITE = const [
   Brand(
     id: 'b5',
     name: 'Sailor',
@@ -63,6 +61,28 @@ const DUMMY_FAVOURITE = const [
     openingTime: '10;00 am',
     closingTime: '8:00 pm',
   ),
+];
+const DUMMY_FAVOURITE = const [
+  Brand(
+    id: 'b5',
+    name: 'Sailor',
+    percentage: '40%',
+    establishedDate: '1979',
+    imgUrl: 'sailor.png',
+    rating: '5',
+    openingTime: '10;00 am',
+    closingTime: '8:00 pm',
+  ),
+  Brand(
+    id: 'b6',
+    name: 'Artisan',
+    percentage: '30%',
+    establishedDate: '1978',
+    imgUrl: 'artisan.jpeg',
+    rating: '5',
+    openingTime: '10;00 am',
+    closingTime: '8:00 pm',
+  ),
   Brand(
     id: 'b7',
     name: 'Westics',
@@ -75,6 +95,26 @@ const DUMMY_FAVOURITE = const [
   ),
   Brand(
     id: 'b8',
+    name: 'Estacy',
+    percentage: '30%',
+    establishedDate: '1999',
+    imgUrl: 'estacy.png',
+    rating: '4',
+    openingTime: '10;00 am',
+    closingTime: '8:00 pm',
+  ),
+  Brand(
+    id: 'b9',
+    name: 'Estacy',
+    percentage: '30%',
+    establishedDate: '1999',
+    imgUrl: 'estacy.png',
+    rating: '4',
+    openingTime: '10;00 am',
+    closingTime: '8:00 pm',
+  ),
+  Brand(
+    id: 'b10',
     name: 'Estacy',
     percentage: '30%',
     establishedDate: '1999',

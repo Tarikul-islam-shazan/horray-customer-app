@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:horray/screens/brand_detail_screen.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import '../screens/brand_detail_screen.dart';
 import '../screens/brand_list_screen.dart';
 
 void main() => runApp(MyApp());
@@ -7,12 +8,13 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(Colors.white);
     return MaterialApp(
       title: 'Horray',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primaryColor: Colors.white,
         accentColor: Colors.amber,
-        canvasColor: Color.fromRGBO(255, 254, 229, 1),
+        canvasColor: Colors.white,
         fontFamily: 'Raleway',
         textTheme: ThemeData.light().textTheme.copyWith(
             body1: TextStyle(
