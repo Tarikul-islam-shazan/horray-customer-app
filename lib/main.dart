@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:horray/screens/tabs_screen.dart';
 import '../screens/brand_detail_screen.dart';
-import '../screens/brand_list_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (ctx) => BrandListScreen(),
+        '/': (ctx) => TabsScreen(),
         BrandDetailScreen.routeName: (ctx) => BrandDetailScreen(),
       },
     );
