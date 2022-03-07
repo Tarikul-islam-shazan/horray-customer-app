@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:horray/screens/favorite_screen.dart';
-import 'package:horray/screens/offer_scree.dart';
-import 'package:horray/screens/profile_screen.dart';
+import '../screens/favorite_screen.dart';
+import '../screens/offer_scree.dart';
+import '../screens/profile_screen.dart';
 import '../screens/brand_list_screen.dart';
 import '../widgets/main_drawer.dart';
 
@@ -48,7 +48,7 @@ class _TabsScreenState extends State<TabsScreen> {
           elevation: 0,
         ),
         drawer: MainDrawer(),
-        body: _pages[selectedPageIndex]['page'],
+        body: _pages[selectedPageIndex]['page'] as Widget,
         bottomNavigationBar: BottomNavigationBar(
           onTap: _selectPage,
           backgroundColor: Theme.of(context).primaryColor,

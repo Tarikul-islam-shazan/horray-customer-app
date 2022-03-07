@@ -11,13 +11,13 @@ class Brand {
   final String closingTime;
 
   const Brand({
-    @required this.id,
-    @required this.name,
-    @required this.percentage,
-    @required this.establishedDate,
-    @required this.imgUrl,
-    @required this.rating,
-    @required this.openingTime,
-    @required this.closingTime,
+    required this.id,
+    required this.name,
+    required this.percentage,
+    required this.establishedDate,
+    required this.imgUrl,
+    required this.rating,
+    required this.openingTime,
+    required this.closingTime,
   });
 }

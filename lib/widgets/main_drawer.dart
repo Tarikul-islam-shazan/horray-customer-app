@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../screens/contact_us_screen.dart';
+import '../screens/faq_screen.dart';
+import '../screens/settings_screen.dart';
 
 class MainDrawer extends StatelessWidget {
-  Widget buildListTitle(String title, IconData icon) {
+  Widget buildListTitle(String title, IconData icon, VoidCallback tapHandler) {
     return ListTile(
       leading: Icon(
         icon,
@@ -15,7 +18,7 @@ class MainDrawer extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      onTap: () {},
+      onTap: tapHandler,
     );
   }
 
@@ -45,14 +48,23 @@ class MainDrawer extends StatelessWidget {
           buildListTitle(
             'FAQ',
             Icons.verified_user,
+            () {
+              Navigator.of(context).pushNamed(FAQSreen.routeName);
+            },
           ),
           buildListTitle(
             'Settings',
             Icons.settings,
+            () {
+              Navigator.of(context).pushNamed(SettingsScreen.routeName);
+            },
           ),
           buildListTitle(
             'Conatct Us',
             Icons.phone_enabled,
+            () {
+              Navigator.of(context).pushNamed(ContactUsScreen.routeName);
+            },
           ),
         ],
       ),

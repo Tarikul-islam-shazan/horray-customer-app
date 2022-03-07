@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
-import 'package:horray/screens/tabs_screen.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+
+import '../screens/shopping_payment_screen.dart';
+import '../screens/contact_us_screen.dart';
+import '../screens/faq_screen.dart';
+import '../screens/settings_screen.dart';
+import '../screens/tabs_screen.dart';
 import '../screens/brand_detail_screen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(HorrayApp());
 
-class MyApp extends StatelessWidget {
+class HorrayApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarColor(Colors.white);
@@ -17,13 +22,13 @@ class MyApp extends StatelessWidget {
         canvasColor: Colors.white,
         fontFamily: 'Raleway',
         textTheme: ThemeData.light().textTheme.copyWith(
-            body1: TextStyle(
+            bodyText1: TextStyle(
               color: Color.fromRGBO(20, 51, 51, 1),
             ),
-            body2: TextStyle(
+            bodyText2: TextStyle(
               color: Color.fromRGBO(20, 51, 51, 1),
             ),
-            title: TextStyle(
+            headline6: TextStyle(
               fontSize: 16,
               fontFamily: 'RobotoCondensed',
               fontWeight: FontWeight.w500,
@@ -33,6 +38,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (ctx) => TabsScreen(),
         BrandDetailScreen.routeName: (ctx) => BrandDetailScreen(),
+        FAQSreen.routeName: (ctx) => FAQSreen(),
+        SettingsScreen.routeName: (ctx) => SettingsScreen(),
+        ContactUsScreen.routeName: (ctx) => ContactUsScreen(),
+        ShoppingPaymentScreen.routeName: (ctx) => ShoppingPaymentScreen(),
       },
     );
   }

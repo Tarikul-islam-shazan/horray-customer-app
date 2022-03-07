@@ -56,14 +56,14 @@ class BrandListScreen extends StatelessWidget {
                   padding: EdgeInsets.only(right: 200),
                   child: Text(
                     'TOP BRANDS',
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 Container(
                   alignment: Alignment.topRight,
                   child: Text(
                     'See All..',
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
               ],
@@ -100,13 +100,13 @@ class BrandListScreen extends StatelessWidget {
                   padding: EdgeInsets.only(right: 200),
                   child: Text(
                     'HIGHEST DISCOUNT',
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
                 Container(
                   child: Text(
                     'See All..',
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
               ],
