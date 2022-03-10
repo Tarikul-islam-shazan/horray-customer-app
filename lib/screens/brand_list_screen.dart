@@ -21,7 +21,7 @@ class BrandListScreen extends StatelessWidget {
               child: ImageSlideshow(
                 width: double.infinity,
                 height: 200,
-                initialPage: 1,
+                initialPage: 2,
                 indicatorColor: Colors.blue,
                 indicatorBackgroundColor: Colors.grey,
                 children: [
@@ -41,7 +41,7 @@ class BrandListScreen extends StatelessWidget {
                 onPageChanged: (value) {
                   print('Page changed: $value');
                 },
-                autoPlayInterval: 3000,
+                autoPlayInterval: 4000,
               ),
             ),
           ),

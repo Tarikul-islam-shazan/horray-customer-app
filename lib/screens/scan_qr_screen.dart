@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class ShoppingPaymentScreen extends StatefulWidget {
+class ScanQRScreen extends StatefulWidget {
   static const routeName = '/shopping-payment';
 
   @override
-  _ShoppingPaymentScreenState createState() => _ShoppingPaymentScreenState();
+  _ScanQRScreenState createState() => _ScanQRScreenState();
 }
 
-class _ShoppingPaymentScreenState extends State<ShoppingPaymentScreen> {
+class _ScanQRScreenState extends State<ScanQRScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
@@ -30,6 +30,9 @@ class _ShoppingPaymentScreenState extends State<ShoppingPaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('SCAN QR'),
+      ),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -45,30 +48,39 @@ class _ShoppingPaymentScreenState extends State<ShoppingPaymentScreen> {
                 children: <Widget>[
                   if (result != null)
                     Text(
-                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code.toString()}',
+                      style: Theme.of(context).textTheme.headline6,
+                    )
                   else
-                    const Text('Scan a code'),
+                    Text(
+                      'Not scan yet!',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
                         margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.toggleFlash();
-                              setState(() {});
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            await controller?.toggleFlash();
+                            setState(() {});
+                          },
+                          child: FutureBuilder(
+                            future: controller?.getFlashStatus(),
+                            builder: (context, snapshot) {
+                              return Text(
+                                'Flash: ${(snapshot.data == null) || (snapshot.data == false) ? "Off" : "On"}',
+                                style: Theme.of(context).textTheme.headline6,
+                              );
                             },
-                            child: FutureBuilder(
-                              future: controller?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                return Text('Flash: ${snapshot.data}');
-                              },
-                            )),
+                          ),
+                        ),
                       ),
                       Container(
                         margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
+                        child: OutlinedButton(
                             onPressed: () async {
                               await controller?.flipCamera();
                               setState(() {});
@@ -78,7 +90,10 @@ class _ShoppingPaymentScreenState extends State<ShoppingPaymentScreen> {
                               builder: (context, snapshot) {
                                 if (snapshot.data != null) {
                                   return Text(
-                                      'Camera facing ${describeEnum(snapshot.data!)}');
+                                    'Camera facing ${describeEnum(snapshot.data!)}',
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  );
                                 } else {
                                   return const Text('loading');
                                 }
@@ -93,22 +108,26 @@ class _ShoppingPaymentScreenState extends State<ShoppingPaymentScreen> {
                     children: <Widget>[
                       Container(
                         margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
+                        child: OutlinedButton(
                           onPressed: () async {
                             await controller?.pauseCamera();
                           },
-                          child: const Text('pause',
-                              style: TextStyle(fontSize: 20)),
+                          child: Text(
+                            'pause',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         ),
                       ),
                       Container(
                         margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
+                        child: OutlinedButton(
                           onPressed: () async {
                             await controller?.resumeCamera();
                           },
-                          child: const Text('resume',
-                              style: TextStyle(fontSize: 20)),
+                          child: Text(
+                            'resume',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         ),
                       )
                     ],
@@ -123,7 +142,8 @@ class _ShoppingPaymentScreenState extends State<ShoppingPaymentScreen> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
+    // For this example we check how width or tall the device is and
+    // change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
         ? 150.0

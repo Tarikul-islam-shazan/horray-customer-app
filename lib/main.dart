@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 
-import '../screens/shopping_payment_screen.dart';
+import '../screens/scan_qr_screen.dart';
 import '../screens/contact_us_screen.dart';
 import '../screens/faq_screen.dart';
 import '../screens/settings_screen.dart';
@@ -41,7 +41,7 @@ class HorrayApp extends StatelessWidget {
         FAQSreen.routeName: (ctx) => FAQSreen(),
         SettingsScreen.routeName: (ctx) => SettingsScreen(),
         ContactUsScreen.routeName: (ctx) => ContactUsScreen(),
-        ShoppingPaymentScreen.routeName: (ctx) => ShoppingPaymentScreen(),
+        ScanQRScreen.routeName: (ctx) => ScanQRScreen(),
       },
     );
   }

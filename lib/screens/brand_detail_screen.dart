@@ -1,7 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:horray/screens/shopping_payment_screen.dart';
+import '../screens/scan_qr_screen.dart';
 import '../widgets/brand_detail_item.dart';
 import '../dummy_data.dart';
 import '../models/brand.dart';
@@ -50,8 +48,7 @@ class BrandDetailScreen extends StatelessWidget {
                 padding: EdgeInsets.all(16),
               ),
               onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(ShoppingPaymentScreen.routeName);
+                Navigator.of(context).pushNamed(ScanQRScreen.routeName);
               },
               child: Text(
                 'Payment',
