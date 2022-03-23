@@ -40,61 +40,87 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _form,
-          child: ListView(
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Phone',
-                ),
-                //textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.phone,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.orange, Colors.pink]),
+          ),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Container(
+            margin: EdgeInsets.all(40.0),
+            height: 250,
+            width: 300,
+            child: Center(
+              child: Card(
+                elevation: 5.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _form,
+                    child: Container(
+                      child: ListView(
+                        children: <Widget>[
+                          TextFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Phone',
+                                border: OutlineInputBorder()),
+                            //textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.phone,
 
-                validator: (value) {
-                  if (value.toString().isEmpty) {
-                    return 'Please provide a phone no.';
-                  }
-                  if (value.toString().length != 11) {
-                    return 'Please enter 11 digits.';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _loginForm['phone'] = value.toString();
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Password',
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return 'Please provide a phone no.';
+                              }
+                              if (value.toString().length != 11) {
+                                return 'Please enter 11 digits.';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _loginForm['phone'] = value.toString();
+                            },
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              border: OutlineInputBorder(),
+                            ),
+                            obscureText: true,
+                            controller: _passwordController,
+                            // textInputAction: TextInputAction.next,
+                            // keyboardType: TextInputType.visiblePassword,
+                            // onFieldSubmitted: (_) {
+                            //   // _saveForm();
+                            // },
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return 'Please provide a password.';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _loginForm['password'] = value.toString();
+                            },
+                          ),
+                          OutlinedButton(
+                            onPressed: () {
+                              _saveForm(context);
+                            },
+                            child: Text(
+                              'Sign In',
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                obscureText: true,
-                controller: _passwordController,
-                // textInputAction: TextInputAction.next,
-                // keyboardType: TextInputType.visiblePassword,
-                // onFieldSubmitted: (_) {
-                //   // _saveForm();
-                // },
-                validator: (value) {
-                  if (value.toString().isEmpty) {
-                    return 'Please provide a password.';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _loginForm['password'] = value.toString();
-                },
               ),
-              OutlinedButton(
-                onPressed: () {
-                  _saveForm(context);
-                },
-                child: Text(
-                  'Sign In',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

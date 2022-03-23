@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:horray/provider/auth.dart';
-import 'package:horray/provider/user.dart';
 import 'package:horray/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +16,24 @@ class _ProfileState extends State<Profile> {
     'reference': '',
   };
 
-  void _saveForm(BuildContext context) {
+  void showSnackBar(String message, BuildContext context) {
+    final snackBar =
+        new SnackBar(content: new Text(message), backgroundColor: Colors.red);
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  void _saveForm(BuildContext context) async {
+    var auth = Provider.of<Auth>(context, listen: false);
     final isValid = _form.currentState!.validate();
     if (!isValid) return;
     _form.currentState!.save();
+    var agentId = auth.loadedAgent.id;
+    try {
+      await auth.updateAgent(agentId, _referenceForm['reference'].toString());
+      this.showSnackBar('Update successfully', context);
+    } catch (err) {
+      print(err);
+    }
   }
 
   @override
@@ -28,6 +41,23 @@ class _ProfileState extends State<Profile> {
     final auth = Provider.of<Auth>(context);
     // Provider.of<Auth>(context, listen: true).getUserinfo();
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Profile',
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        actions: auth.isAuth
+            ? <Widget>[
+                IconButton(
+                  onPressed: () {
+                    auth.logout();
+                    Navigator.of(context).pushNamed(LoginScreen.routeName);
+                  },
+                  icon: Icon(Icons.logout),
+                )
+              ]
+            : [],
+      ),
       body: Padding(
         padding: EdgeInsets.all(10),
         child: auth.isAuth
@@ -52,8 +82,14 @@ class _ProfileState extends State<Profile> {
                               CircleAvatar(
                                 backgroundColor: Colors.brown,
                                 child: Text(
-                                  auth.loadedUser.firstName[0].toUpperCase() +
-                                      auth.loadedUser.lastName[0].toUpperCase(),
+                                  (auth.loadedUser.firstName.isNotEmpty
+                                          ? auth.loadedUser.firstName[0]
+                                              .toUpperCase()
+                                          : '') +
+                                      (auth.loadedUser.lastName.isNotEmpty
+                                          ? auth.loadedUser.lastName[0]
+                                              .toUpperCase()
+                                          : ''),
                                   style: Theme.of(context).textTheme.headline6,
                                 ),
                                 radius: 50.0,
@@ -213,34 +249,38 @@ class _ProfileState extends State<Profile> {
                       builder: (_, auth, child) => ListView.builder(
                         itemCount: auth.loadedAgent.members.length,
                         itemBuilder: (BuildContext ctx, index) => Container(
-                          height: 50,
-                          child: Card(
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 20.0,
-                              vertical: 5.0,
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            color: Colors.white,
-                            elevation: 5.0,
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.brown,
-                                  child: Text(
-                                    'AH',
+                          height: 100,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              // margin: EdgeInsets.symmetric(
+                              //   horizontal: 20.0,
+                              //   vertical: 5.0,
+                              // ),
+                              clipBehavior: Clip.antiAlias,
+                              color: Colors.white,
+                              elevation: 5.0,
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.brown,
+                                    child: Text(
+                                      'AH',
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
+                                    radius: 20.0,
+                                  ),
+                                  SizedBox(
+                                    width: 20.0,
+                                  ),
+                                  Text(
+                                    auth.loadedAgent.members[index],
                                     style:
                                         Theme.of(context).textTheme.headline6,
                                   ),
-                                  radius: 20.0,
-                                ),
-                                SizedBox(
-                                  width: 20.0,
-                                ),
-                                Text(
-                                  auth.loadedAgent.members[index],
-                                  style: Theme.of(context).textTheme.headline6,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -248,16 +288,16 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                   ),
-                  OutlinedButton(
-                    onPressed: () {
-                      auth.logout();
-                      Navigator.of(context).pushNamed(LoginScreen.routeName);
-                    },
-                    child: Text(
-                      'Logout',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ),
+                  // OutlinedButton(
+                  //   onPressed: () {
+                  //     auth.logout();
+                  //     Navigator.of(context).pushNamed(LoginScreen.routeName);
+                  //   },
+                  //   child: Text(
+                  //     'Logout',
+                  //     style: Theme.of(context).textTheme.headline6,
+                  //   ),
+                  // ),
                 ],
               )
             : Column(
