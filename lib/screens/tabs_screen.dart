@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:horray/provider/auth.dart';
+import 'package:horray/screens/login_screen.dart';
+import 'package:horray/screens/scan_qr_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../screens/favorite_screen.dart';
 import '../screens/offer_scree.dart';
 import '../screens/profile_screen.dart';

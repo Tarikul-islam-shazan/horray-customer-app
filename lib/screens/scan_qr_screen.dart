@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import '../screens/payment_info_screen.dart';
 
 class ScanQRScreen extends StatefulWidget {
   static const routeName = '/shopping-payment';
@@ -27,6 +28,10 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
     }
   }
 
+  void goToResultPage(BuildContext context) {
+    Navigator.of(context).pushNamed(PaymentInfo.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,16 +51,28 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  if (result != null)
-                    Text(
-                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code.toString()}',
-                      style: Theme.of(context).textTheme.headline6,
-                    )
-                  else
-                    Text(
-                      'Not scan yet!',
-                      style: Theme.of(context).textTheme.headline6,
+                  // if (result != null)
+                  //   Text(
+                  //     'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code.toString()}',
+                  //     style: Theme.of(context).textTheme.headline6,
+                  //   )
+                  // else
+                  //   Text(
+                  //     'Not scan yet!',
+                  //     style: Theme.of(context).textTheme.headline6,
+                  //   ),
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (result != null) goToResultPage(context);
+                      },
+                      child: Text(
+                        'Done',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,6 +82,7 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
                         child: OutlinedButton(
                           onPressed: () async {
                             await controller?.toggleFlash();
+
                             setState(() {});
                           },
                           child: FutureBuilder(
@@ -129,7 +147,7 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
                             style: Theme.of(context).textTheme.headline6,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ],
