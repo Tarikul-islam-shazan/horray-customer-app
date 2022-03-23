@@ -27,7 +27,7 @@ class _TabsScreenState extends State<TabsScreen> {
     },
     {
       'page': OfferScreen(),
-      'title': 'Offer',
+      'title': 'QR',
     },
     {
       'page': Profile(),
@@ -75,7 +75,7 @@ class _TabsScreenState extends State<TabsScreen> {
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
               icon: Icon(Icons.local_offer),
-              title: Text('Offer'),
+              title: Text('QR'),
             ),
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,

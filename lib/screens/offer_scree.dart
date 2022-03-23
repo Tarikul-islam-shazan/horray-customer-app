@@ -5,10 +5,10 @@ class OfferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
           textStyle: TextStyle(fontSize: 16),
-          onPrimary: Colors.white,
+          //onPrimary: Colors.white,
           padding: EdgeInsets.all(16),
         ),
         onPressed: () {
