@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:horray/provider/auth.dart';
-import 'package:horray/screens/login_screen.dart';
-import 'package:horray/screens/scan_qr_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import '../screens/favorite_screen.dart';
+import '../screens/search_screen.dart';
 import '../screens/offer_scree.dart';
 import '../screens/profile_screen.dart';
 import '../screens/brand_list_screen.dart';
@@ -16,14 +11,15 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
+  static final pageTitle = "Horray";
   final List<Map<String, Object>> _pages = [
     {
       'page': BrandListScreen(),
       'title': 'Home',
     },
     {
-      'page': Favorite(),
-      'title': 'Favorite',
+      'page': SearchScreen(),
+      'title': 'Search',
     },
     {
       'page': OfferScreen(),
@@ -48,11 +44,14 @@ class _TabsScreenState extends State<TabsScreen> {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('BRANDS'),
-          elevation: 0,
-        ),
-        drawer: MainDrawer(),
+        // appBar: AppBar(
+        //   title: Text(
+        //     pageTitle.toUpperCase(),
+        //     style: Theme.of(context).textTheme.headline3,
+        //   ),
+        //   elevation: 0,
+        // ),
+        //drawer: MainDrawer(),
         body: _pages[selectedPageIndex]['page'] as Widget,
         bottomNavigationBar: BottomNavigationBar(
           onTap: _selectPage,
@@ -69,12 +68,12 @@ class _TabsScreenState extends State<TabsScreen> {
             ),
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
-              icon: Icon(Icons.favorite),
-              title: Text('Favorite'),
+              icon: Icon(Icons.search),
+              title: Text('Search'),
             ),
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
-              icon: Icon(Icons.local_offer),
+              icon: Icon(Icons.qr_code),
               title: Text('QR'),
             ),
             BottomNavigationBarItem(

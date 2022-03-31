@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:horray/screens/profile_screen.dart';
+import 'package:horray/screens/search_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/login_screen.dart';
@@ -35,10 +36,23 @@ class HorrayApp extends StatelessWidget {
             fontFamily: 'Raleway',
             textTheme: ThemeData.light().textTheme.copyWith(
                 bodyText1: TextStyle(
-                  color: Color.fromRGBO(20, 51, 51, 1),
+                  fontFamily: 'RobotoCondensed',
+                  color: Colors.white,
                 ),
                 bodyText2: TextStyle(
+                  fontFamily: 'RobotoCondensed',
                   color: Color.fromRGBO(20, 51, 51, 1),
+                ),
+                headline2: TextStyle(
+                  fontSize: 32,
+                  fontFamily: 'RobotoCondensed',
+                  fontWeight: FontWeight.w500,
+                  color: Colors.red,
+                ),
+                headline3: TextStyle(
+                  fontSize: 24,
+                  fontFamily: 'RobotoCondensed',
+                  fontWeight: FontWeight.w500,
                 ),
                 headline6: TextStyle(
                   fontSize: 16,
@@ -56,6 +70,7 @@ class HorrayApp extends StatelessWidget {
             ScanQRScreen.routeName: (ctx) => ScanQRScreen(),
             PaymentInfo.routeName: (ctx) => PaymentInfo(),
             LoginScreen.routeName: (ctx) => LoginScreen(),
+            SearchScreen.routeName: (ctx) => SearchScreen(),
           },
         ),
       ),

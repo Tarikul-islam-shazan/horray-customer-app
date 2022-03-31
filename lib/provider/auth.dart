@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
 
 class Auth with ChangeNotifier {
-  String _apiUrl = 'http://192.168.0.103:3000/';
+  String _apiUrl = 'http://192.168.0.104:3000/';
   String _token = '';
   DateTime _expiryDate = DateTime.now();
   User _loadedUser = new User(

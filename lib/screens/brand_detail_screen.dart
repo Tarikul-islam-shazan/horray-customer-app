@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../screens/scan_qr_screen.dart';
 import '../widgets/brand_detail_item.dart';
 import '../dummy_data.dart';
 import '../models/brand.dart';

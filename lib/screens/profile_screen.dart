@@ -42,6 +42,7 @@ class _ProfileState extends State<Profile> {
     // Provider.of<Auth>(context, listen: true).getUserinfo();
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text(
           'Profile',
           style: Theme.of(context).textTheme.headline6,
@@ -195,6 +196,9 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 ),
                               ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
                               Form(
                                 key: _form,
                                 child: Flexible(
@@ -316,7 +320,7 @@ class _ProfileState extends State<Profile> {
                       child: Center(
                         child: Text(
                           'Not logged in yet!',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.headline2,
                         ),
                       ),
                     ),
