@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:horray/provider/agent.dart';
-import 'package:horray/provider/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import '../provider/user.dart';
 
 class Auth with ChangeNotifier {
-  String _apiUrl = 'http://192.168.0.104:3000/';
+  String _apiUrl = dotenv.env['HORRAY_API_URL'].toString();
   String _token = '';
   DateTime _expiryDate = DateTime.now();
   User _loadedUser = new User(
@@ -19,12 +20,7 @@ class Auth with ChangeNotifier {
     reference: '',
     role: [],
   );
-  Agent _loadedAgent = new Agent(
-    id: '',
-    agentRefrence: '',
-    point: 0,
-    members: [],
-  );
+
   String _userId = '';
   bool _isAgent = false;
 
@@ -44,10 +40,6 @@ class Auth with ChangeNotifier {
     return _loadedUser;
   }
 
-  Agent get loadedAgent {
-    return _loadedAgent;
-  }
-
   String get token {
     if (_expiryDate.isAfter(DateTime.now()) && _token.isNotEmpty) {
       return _token;
@@ -62,87 +54,22 @@ class Auth with ChangeNotifier {
         'phone': phone,
         'password': password,
       });
-      print('Response body: ${response.body}');
-      //_token = response.body;
+
+      debugPrint('Response body: ${response.body}');
+
       var data = json.decode(response.body);
       if (data == null) return;
       _token = data['idToken'];
       _expiryDate = DateTime.now().add(
         Duration(
           seconds: int.parse(
-            data['expiresIn'],
+            data['expiresIn'].replaceAll('s', ''),
           ),
         ),
       );
       Map<String, dynamic> payload = Jwt.parseJwt(_token);
-      print(payload);
       _userId = payload['id'];
-      print(_userId);
       this.getUserinfo();
-      notifyListeners();
-    } catch (error) {
-      print(error.toString());
-    }
-  }
-
-  Future<void> getAgent(String ref) async {
-    try {
-      final url = _apiUrl + 'agents/$ref';
-      var response = await http.get(
-        Uri.parse(url),
-        headers: {'Authorization': 'Bearer $token'},
-      );
-      // print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-      if (data == null) return;
-      _loadedAgent = new Agent(
-        id: data['id'],
-        agentRefrence: data['agentRefrence'],
-        point: data['point'],
-        members: [],
-      );
-      // print(data['members'][0]);
-      for (var i = 0; i < data['members'].length; i++) {
-        _loadedAgent.members.insert(i, data['members'][i]);
-      }
-      notifyListeners();
-    } catch (error) {
-      print(error.toString());
-    }
-  }
-
-  Future<void> updateAgent(
-    String agentId,
-    String ref,
-  ) async {
-    try {
-      final url = _apiUrl + 'agents/$agentId';
-      //print(url);
-      var response = await http.patch(
-        Uri.parse(url),
-        headers: {'Authorization': 'Bearer $token'},
-        body: {'memberRefrence': ref},
-      );
-      //print({'memberRefrence': ref});
-      print('Response body: ${response.body}');
-      var data = json.decode(response.body);
-      // if (data == null) throw new Error();
-      if (data['statusCode'] == 401) {
-        return;
-      }
-      _loadedAgent = new Agent(
-        id: data['id'],
-        agentRefrence: data['agentRefrence'],
-        point: data['point'],
-        members: [],
-      );
-      // print(data['members'][0]);
-      for (var i = 0; i < data['members'].length; i++) {
-        _loadedAgent.members.insert(i, data['members'][i]);
-      }
-
-      this.getAgent(loadedAgent.agentRefrence);
-
       notifyListeners();
     } catch (error) {
       print(error.toString());
@@ -178,7 +105,7 @@ class Auth with ChangeNotifier {
       //print(isAgent);
       if (isAgentExist.isNotEmpty) {
         _isAgent = true;
-        this.getAgent(_loadedUser.reference);
+        // this.getAgent(_loadedUser.reference);
       }
       notifyListeners();
     } catch (err) {

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
-import 'package:horray/screens/profile_screen.dart';
-import 'package:horray/screens/search_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../screens/login_screen.dart';
 import '../screens/payment_info_screen.dart';
@@ -12,9 +11,14 @@ import '../screens/faq_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/tabs_screen.dart';
 import '../screens/brand_detail_screen.dart';
+import '../screens/search_screen.dart';
 import './provider/auth.dart';
+import './provider/agent.dart';
 
-void main() => runApp(HorrayApp());
+Future main() async {
+  await dotenv.load(fileName: ".env");
+  runApp(HorrayApp());
+}
 
 class HorrayApp extends StatelessWidget {
   @override
@@ -24,7 +28,12 @@ class HorrayApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Auth(),
-        )
+        ),
+        ChangeNotifierProxyProvider<Auth, Agent>(
+          create: (context) =>
+              Agent(Provider.of<Auth>(context, listen: false).token),
+          update: (ctx, auth, previousProducts) => Agent(auth.token),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -36,11 +45,11 @@ class HorrayApp extends StatelessWidget {
             fontFamily: 'Raleway',
             textTheme: ThemeData.light().textTheme.copyWith(
                 bodyText1: TextStyle(
-                  fontFamily: 'RobotoCondensed',
+                  //fontFamily: 'RobotoCondensed',
                   color: Colors.white,
                 ),
                 bodyText2: TextStyle(
-                  fontFamily: 'RobotoCondensed',
+                  // fontFamily: 'RobotoCondensed',
                   color: Color.fromRGBO(20, 51, 51, 1),
                 ),
                 headline2: TextStyle(
@@ -62,7 +71,6 @@ class HorrayApp extends StatelessWidget {
           ),
           home: TabsScreen(),
           routes: {
-            //'/': (ctx) => TabsScreen(),
             BrandDetailScreen.routeName: (ctx) => BrandDetailScreen(),
             FAQSreen.routeName: (ctx) => FAQSreen(),
             SettingsScreen.routeName: (ctx) => SettingsScreen(),
