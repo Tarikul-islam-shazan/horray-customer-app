@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../provider/auth.dart';
+import '../screens/login_screen.dart';
 import '../screens/search_screen.dart';
 import '../screens/offer_scree.dart';
 import '../screens/profile_screen.dart';
 import '../screens/brand_list_screen.dart';
-import '../widgets/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
   @override
@@ -29,6 +31,10 @@ class _TabsScreenState extends State<TabsScreen> {
       'page': Profile(),
       'title': 'Profile',
     },
+    {
+      'page': LoginScreen(),
+      'title': 'Login',
+    },
   ];
 
   int selectedPageIndex = 0;
@@ -41,18 +47,13 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var _auth = Provider.of<Auth>(context, listen: false);
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        // appBar: AppBar(
-        //   title: Text(
-        //     pageTitle.toUpperCase(),
-        //     style: Theme.of(context).textTheme.headline3,
-        //   ),
-        //   elevation: 0,
-        // ),
-        //drawer: MainDrawer(),
-        body: _pages[selectedPageIndex]['page'] as Widget,
+        body: (selectedPageIndex == 3 && !_auth.isAuth)
+            ? LoginScreen()
+            : _pages[selectedPageIndex]['page'] as Widget,
         bottomNavigationBar: BottomNavigationBar(
           onTap: _selectPage,
           backgroundColor: Theme.of(context).primaryColor,
@@ -64,7 +65,10 @@ class _TabsScreenState extends State<TabsScreen> {
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
               icon: Icon(Icons.home),
-              title: Text('Home'),
+              title: Text(
+                'Home',
+                style: Theme.of(context).textTheme.headline6,
+              ),
             ),
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
@@ -78,8 +82,10 @@ class _TabsScreenState extends State<TabsScreen> {
             ),
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
-              icon: Icon(Icons.supervised_user_circle),
-              title: Text('Profile'),
+              icon: _auth.isAuth
+                  ? Icon(Icons.supervised_user_circle)
+                  : Icon(Icons.login_outlined),
+              title: _auth.isAuth ? Text('Profile') : Text('Login'),
             ),
           ],
         ),

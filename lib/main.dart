@@ -16,7 +16,7 @@ import './provider/auth.dart';
 import './provider/agent.dart';
 
 Future main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "assets/.env");
   runApp(HorrayApp());
 }
 

@@ -14,23 +14,185 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final _form = GlobalKey<FormState>();
-  var auth;
+  var _auth, _agent;
+  var _isInit = true;
+  bool _isAuthenticated = false;
   Map<String, String> _referenceForm = {
     'reference': '',
   };
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  void showSnackBar(String message, BuildContext context) {
-    final snackBar = new SnackBar(
-      content: new Text(message),
-      backgroundColor: Colors.red,
+  Widget build(BuildContext context) {
+    _auth = Provider.of<Auth>(context, listen: false);
+    _agent = Provider.of<Agent>(context, listen: false);
+    _isAuthenticated = _auth.isAuth;
+    if (_auth.isAgent) {
+      _agent.getAgent(_auth.loadedUser.reference);
+    }
+    return Scaffold(
+      appBar: AppBar(
+          elevation: 0,
+          title: Text(
+            'Profile',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                _auth.logout();
+                Navigator.of(context).pushNamed(LoginScreen.routeName);
+              },
+              icon: Icon(Icons.logout),
+            )
+          ]),
+      body: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.orange, Colors.pink]),
+                ),
+                child: Container(
+                  width: double.infinity,
+                  height: 350.0,
+                  child: Center(
+                    child: Consumer<Auth>(
+                      builder: (_, auth, child) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.brown,
+                            child: Text(
+                              (auth.loadedUser.firstName.isNotEmpty
+                                      ? auth.loadedUser.firstName[0]
+                                          .toUpperCase()
+                                      : '') +
+                                  (auth.loadedUser.lastName.isNotEmpty
+                                      ? auth.loadedUser.lastName[0]
+                                          .toUpperCase()
+                                      : ''),
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            radius: 50.0,
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            auth.loadedUser.firstName +
+                                '' +
+                                auth.loadedUser.lastName,
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            "Refrence: ${auth.loadedUser.reference}",
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Form(
+                            key: _form,
+                            child: Flexible(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Flexible(
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                        labelText: 'Reference',
+                                        labelStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      //textInputAction: TextInputAction.next,
+                                      keyboardType: TextInputType.text,
+                                      validator: (value) {
+                                        if (value.toString().isEmpty) {
+                                          return 'Please provide refrence no.';
+                                        }
+                                        return null;
+                                      },
+                                      onSaved: (newValue) {
+                                        _referenceForm['reference'] =
+                                            newValue.toString();
+                                      },
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        _saveForm(_auth, _agent);
+                                      },
+                                      child: Text(
+                                        'Add',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Consumer<Agent>(
+                  builder: (_, agent, child) => ListView.builder(
+                    itemCount: agent.loadedAgent.members.length,
+                    itemBuilder: (BuildContext ctx, index) => Container(
+                      height: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          color: Colors.white,
+                          elevation: 5.0,
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.brown,
+                                child: Text(
+                                  'AH',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                                radius: 20.0,
+                              ),
+                              SizedBox(
+                                width: 20.0,
+                              ),
+                              Text(
+                                agent.loadedAgent.members[index],
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(8),
+                  ),
+                ),
+              ),
+            ],
+          )),
     );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void _saveForm(auth, agent) async {
@@ -46,228 +208,11 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final auth = Provider.of<Auth>(context, listen: false);
-    final agent = Provider.of<Agent>(context, listen: false);
-    if (auth.isAgent) {
-      agent.getAgent(auth.loadedUser.reference);
-    }
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(
-          'Profile',
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        actions: auth.isAuth
-            ? <Widget>[
-                IconButton(
-                  onPressed: () {
-                    auth.logout();
-                    Navigator.of(context).pushNamed(LoginScreen.routeName);
-                  },
-                  icon: Icon(Icons.logout),
-                )
-              ]
-            : [],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: auth.isAuth
-            ? Column(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.orange, Colors.pink]),
-                    ),
-                    child: Container(
-                      width: double.infinity,
-                      height: 350.0,
-                      child: Center(
-                        child: Consumer<Auth>(
-                          builder: (_, authUser, child) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.brown,
-                                child: Text(
-                                  (authUser.loadedUser.firstName.isNotEmpty
-                                          ? authUser.loadedUser.firstName[0]
-                                              .toUpperCase()
-                                          : '') +
-                                      (authUser.loadedUser.lastName.isNotEmpty
-                                          ? authUser.loadedUser.lastName[0]
-                                              .toUpperCase()
-                                          : ''),
-                                  style: Theme.of(context).textTheme.headline6,
-                                ),
-                                radius: 50.0,
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                auth.loadedUser.firstName +
-                                    '' +
-                                    auth.loadedUser.lastName,
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                "Refrence: ${auth.loadedUser.reference}",
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                              SizedBox(
-                                height: 20.0,
-                              ),
-                              Form(
-                                key: _form,
-                                child: Flexible(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Flexible(
-                                        child: TextFormField(
-                                          decoration: InputDecoration(
-                                            labelText: 'Reference',
-                                            labelStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
-                                            border: OutlineInputBorder(),
-                                          ),
-                                          //textInputAction: TextInputAction.next,
-                                          keyboardType: TextInputType.text,
-                                          validator: (value) {
-                                            if (value.toString().isEmpty) {
-                                              return 'Please provide refrence no.';
-                                            }
-                                            return null;
-                                          },
-                                          onSaved: (newValue) {
-                                            _referenceForm['reference'] =
-                                                newValue.toString();
-                                          },
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            _saveForm(auth, agent);
-                                          },
-                                          child: Text(
-                                            'Add',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Consumer<Agent>(
-                      builder: (_, agentList, child) => ListView.builder(
-                        itemCount: agentList.loadedAgent.members.length,
-                        itemBuilder: (BuildContext ctx, index) => Container(
-                          height: 100,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Card(
-                              // margin: EdgeInsets.symmetric(
-                              //   horizontal: 20.0,
-                              //   vertical: 5.0,
-                              // ),
-                              clipBehavior: Clip.antiAlias,
-                              color: Colors.white,
-                              elevation: 5.0,
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.brown,
-                                    child: Text(
-                                      'AH',
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
-                                    ),
-                                    radius: 20.0,
-                                  ),
-                                  SizedBox(
-                                    width: 20.0,
-                                  ),
-                                  Text(
-                                    agentList.loadedAgent.members[index],
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(8),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  Container(
-                    height: 400,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        20,
-                      ), // use instead of BorderRadius.all(Radius.circular(20))
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    child: Card(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 20.0,
-                        vertical: 5.0,
-                      ),
-                      //shape: const CircleBorder(),
-                      clipBehavior: Clip.antiAlias,
-                      color: Colors.white,
-                      elevation: 5.0,
-                      child: Center(
-                        child: Text(
-                          'Not logged in yet!',
-                          style: Theme.of(context).textTheme.headline2,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  OutlinedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(LoginScreen.routeName);
-                    },
-                    child: Text(
-                      'Go To login page',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ),
-                ],
-              ),
-      ),
+  void showSnackBar(String message, BuildContext context) {
+    final snackBar = new SnackBar(
+      content: new Text(message),
+      backgroundColor: Colors.red,
     );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

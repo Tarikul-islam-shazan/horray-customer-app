@@ -12,20 +12,35 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _form = GlobalKey<FormState>();
+  final loginButtonText = 'Sign In';
   final _passwordController = TextEditingController();
   Map<String, String> _loginForm = {
     'phone': '',
     'password': '',
   };
 
+  void showSnackBar(String message, BuildContext context) {
+    final snackBar = new SnackBar(
+      content: new Text(message),
+      backgroundColor: Colors.red,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   Future<void> _saveForm(BuildContext ctx) async {
     final isValid = _form.currentState!.validate();
     if (!isValid) return;
     _form.currentState!.save();
     try {
-      await Provider.of<Auth>(context, listen: false).login(
-          _loginForm['phone'].toString(), _loginForm['password'].toString());
-      Navigator.pop(context);
+      var auth = Provider.of<Auth>(context, listen: false);
+      await auth.login(
+        _loginForm['phone'].toString(),
+        _loginForm['password'].toString(),
+      );
+      if (auth.isAuth)
+        Navigator.of(context).pushNamed(Profile.routeName);
+      else
+        this.showSnackBar('Error in loggin', ctx);
     } catch (error) {}
   }
 
@@ -35,23 +50,23 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: Text(
           'Login Here',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.headline3,
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.orange, Colors.pink]),
-          ),
+          // decoration: BoxDecoration(
+          //   gradient: LinearGradient(
+          //       begin: Alignment.topCenter,
+          //       end: Alignment.bottomCenter,
+          //       colors: [Colors.orange, Colors.pink]),
+          // ),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: Container(
             margin: EdgeInsets.all(40.0),
-            height: 250,
+            height: MediaQuery.of(context).size.height * 0.8,
             width: 300,
             child: Center(
               child: Card(
@@ -61,6 +76,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Form(
                     key: _form,
                     child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.4,
                       child: ListView(
                         children: <Widget>[
                           TextFormField(
@@ -82,6 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             onSaved: (value) {
                               _loginForm['phone'] = value.toString();
                             },
+                          ),
+                          SizedBox(
+                            height: 20.0,
                           ),
                           TextFormField(
                             decoration: InputDecoration(
@@ -105,15 +125,31 @@ class _LoginScreenState extends State<LoginScreen> {
                               _loginForm['password'] = value.toString();
                             },
                           ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
                           OutlinedButton(
                             onPressed: () {
                               _saveForm(context);
                             },
-                            child: Text(
-                              'Sign In',
-                              style: Theme.of(context).textTheme.headline6,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Text(
+                                loginButtonText,
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
                             ),
                           ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Colors.blue,
+                            ),
+                            onPressed: () {},
+                            child: Text("Don't you have any account?"),
+                          )
                         ],
                       ),
                     ),
