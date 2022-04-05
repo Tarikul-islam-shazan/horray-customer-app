@@ -14,6 +14,7 @@ import '../screens/brand_detail_screen.dart';
 import '../screens/search_screen.dart';
 import './provider/auth.dart';
 import './provider/agent.dart';
+import './provider/brand.dart';
 
 Future main() async {
   await dotenv.load(fileName: "assets/.env");
@@ -28,6 +29,9 @@ class HorrayApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Auth(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Brand(),
         ),
         ChangeNotifierProxyProvider<Auth, Agent>(
           create: (context) =>

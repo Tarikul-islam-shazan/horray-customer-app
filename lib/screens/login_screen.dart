@@ -56,12 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
-          // decoration: BoxDecoration(
-          //   gradient: LinearGradient(
-          //       begin: Alignment.topCenter,
-          //       end: Alignment.bottomCenter,
-          //       colors: [Colors.orange, Colors.pink]),
-          // ),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: Container(
@@ -110,11 +104,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             obscureText: true,
                             controller: _passwordController,
-                            // textInputAction: TextInputAction.next,
-                            // keyboardType: TextInputType.visiblePassword,
-                            // onFieldSubmitted: (_) {
-                            //   // _saveForm();
-                            // },
                             validator: (value) {
                               if (value.toString().isEmpty) {
                                 return 'Please provide a password.';

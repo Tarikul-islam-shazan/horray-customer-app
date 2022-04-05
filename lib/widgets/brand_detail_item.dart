@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BrandDetailItem extends StatelessWidget {
+  var _siteUploadUrl =
+      dotenv.env['HORRAY_UPLOAD_URL'].toString() + 'marchants/';
   final String imageUrl;
   final String name;
-  final String percentage;
-  final String establishedDate;
-  final String rating;
-  final String opening;
-  final String closing;
+  final int percentage;
+  //final String rating;
 
-  BrandDetailItem(this.imageUrl, this.name, this.percentage,
-      this.establishedDate, this.rating, this.opening, this.closing);
+  BrandDetailItem(this.imageUrl, this.name, this.percentage);
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +30,8 @@ class BrandDetailItem extends StatelessWidget {
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15),
                   ),
-                  child: Image.asset(
-                    'assets/images/' + imageUrl,
+                  child: Image.network(
+                    _siteUploadUrl + imageUrl,
                     height: 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -51,7 +50,7 @@ class BrandDetailItem extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        percentage,
+                        percentage.toString() + '%',
                         style: TextStyle(
                           fontSize: 26,
                           color: Colors.white,
@@ -69,33 +68,11 @@ class BrandDetailItem extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Row(
-                    children: [
-                      Icon(Icons.watch),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text('Opening: ' + opening),
-                    ],
+                  Icon(Icons.reviews),
+                  SizedBox(
+                    width: 6,
                   ),
-                  Row(
-                    children: [
-                      Icon(Icons.watch_later),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text('Closing: ' + closing),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(Icons.reviews),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text('Rate: ' + rating),
-                    ],
-                  ),
+                  Text('Rate: '),
                 ],
               ),
             ),

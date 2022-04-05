@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../screens/brand_detail_screen.dart';
 
 class BrandItem extends StatelessWidget {
   final String id;
-  final String percentage;
+  final int percentage;
   final String imgUrl;
-  final String type;
+
+  var _siteUploadUrl =
+      dotenv.env['HORRAY_UPLOAD_URL'].toString() + 'marchants/';
 
   BrandItem(
     this.id,
     this.percentage,
     this.imgUrl,
-    this.type,
   );
 
   void selectBrand(BuildContext ctx) {
@@ -19,7 +21,6 @@ class BrandItem extends StatelessWidget {
       BrandDetailScreen.routeName,
       arguments: {
         'id': id,
-        'type': type,
       },
     );
   }
@@ -42,8 +43,8 @@ class BrandItem extends StatelessWidget {
               Container(
                 margin: EdgeInsets.all(5),
                 child: ClipRRect(
-                  child: Image.asset(
-                    'assets/images/' + imgUrl,
+                  child: Image.network(
+                    _siteUploadUrl + imgUrl,
                     width: 70,
                     height: 30,
                     fit: BoxFit.cover,
@@ -54,7 +55,7 @@ class BrandItem extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 5),
                 child: Container(
                   child: Text(
-                    percentage,
+                    percentage.toString() + '%',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.green,

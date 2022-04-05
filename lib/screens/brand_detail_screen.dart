@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../widgets/brand_detail_item.dart';
-import '../dummy_data.dart';
-import '../models/brand.dart';
+import '../provider/brand.dart';
+//import '../dummy_data.dart';
+//import '../models/brand.dart';
 
 class BrandDetailScreen extends StatefulWidget {
   static const routeName = '/brand-detail';
@@ -12,24 +14,56 @@ class BrandDetailScreen extends StatefulWidget {
 
 class _BrandDetailScreenState extends State<BrandDetailScreen> {
   final _form = GlobalKey<FormState>();
+  var _isInit = true;
+  var _brand, _brandItem;
+  //var _siteUploadUrl = dotenv.env['HORRAY_UPLOAD_URL'].toString() + 'marchants/';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    if (_isInit) {
+      try {
+        final routeArgs =
+            ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+        final brandId = routeArgs['id'];
+        _brand = Provider.of<Brand>(context, listen: false);
+        _brandItem = _brand.loadedBrand.where((brand) {
+          return brand.id == brandId;
+        }).toList();
+        // _brand = Provider.of<Brand>(context, listen: false);
+        //await _brand.getBrands();
+        print('data ${_brand.loadedBrand[0].address}');
+      } catch (error) {
+        print('Error $error');
+      }
+      //_brand.loadedBrand.map((data) => {print(data.id)});
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-    final brandType = routeArgs['type'];
-    final brandId = routeArgs['id'];
-    final List<Brand> brandItem = brandType == 'top'
-        ? DUMMY_BRANDS.where((brand) {
-            return brand.id == brandId;
-          }).toList()
-        : DUMMY_FAVOURITE.where((brand) {
-            return brand.id == brandId;
-          }).toList();
+    //final routeArgs =
+    ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+    //final brandId = routeArgs['id'];
+    // _brand = Provider.of<Brand>(context, listen: false);
+    //     await _brand.getBrands();
+    // final List<Brand> brandItem = brandType == 'top'
+    //     ? DUMMY_BRANDS.where((brand) {
+    //         return brand.id == brandId;
+    //       }).toList()
+    //     : DUMMY_FAVOURITE.where((brand) {
+    //         return brand.id == brandId;
+    //       }).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(brandItem[0].name),
+        title: Text(_brandItem[0].name),
         elevation: 0,
       ),
       body: Container(
@@ -39,13 +73,9 @@ class _BrandDetailScreenState extends State<BrandDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             BrandDetailItem(
-              brandItem[0].imgUrl,
-              brandItem[0].name,
-              brandItem[0].percentage,
-              brandItem[0].establishedDate,
-              brandItem[0].rating,
-              brandItem[0].openingTime,
-              brandItem[0].closingTime,
+              _brandItem[0].imageUrl,
+              _brandItem[0].name,
+              _brandItem[0].discount,
             ),
             const SizedBox(height: 50),
             Flexible(
